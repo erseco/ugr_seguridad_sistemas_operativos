@@ -1,0 +1,160 @@
+
+SEGURIDAD EN SISTEMAS OPERATIVOS
+
+4º Grado en Informática
+
+Curso 2014-15
+
+Cuestionario de autoevaluación
+
+correspondiente a
+
+Práctica 1.- Administración de la seguridad en Linux
+
+Sesión 3.- Seguridad básica en Linux: herramientas
+
+1.- Cuestiones Introducción
+
+1.- Indica qué cuestiones del guión te han resultado más
+difíciles de seguir:
+
+2.- Cuál crees que es la razón:
+
+a) No están bien explicadas:
+
+b) Necesito más ejemplos:
+
+c) No lo recuerdo bien de Sistemas Operativos (2º Curso):
+
+d) Otra (indicar si es el caso):
+
+3.- A esta Sesión le he dedicado: 2 (horas)
+
+4.- Comenta, si lo crees necesario, algún aspecto que creas
+relevante y que no este planteado en las cuestiones previas:
+
+2.- Actividades
+
+Mis soluciones dadas a las actividades planteadas en la Sesión
+son:
+
+Actividad 3.1:
+
+Tal y como muestra la captura de pantalla hemos ejecutado lsof
+empipado a tail, para solo mostrar los 10 últimos elementos, ya
+que hay muchos procesos en ejecución,
+
+[-- Image: gráficos1 --]
+
+mediante lsof -i podemos ver lo que se está consultando a
+internet, hacemos una busqueda en google y nos da este
+resultado
+
+[-- Image: gráficos6 --]
+
+Actividad 3.2:
+
+Hemos ejecutado el comando ps -eau y como podemos ver en la
+captura de pantalla se están ejecutando
+
+[-- Image: gráficos2 --]Los parametros -eau significan:
+
+e muestra ambiente (environment) después del nombre del comando
+y ` + '
+
+a muestra también los procesos de otros usuarios
+
+u formato usuario: muestra el usuario y la hora de inicio
+
+Me han salido:
+
+/usr/bin/Xorg Entorno de ventanas X11
+
+/sbin/getty Ejecuta los terminales “virtuales” TTY
+
+bash El shell
+
+-ps -eau el comando ps que hemos ejecutado
+
+Actividad 3.3:
+
+Hemos instalado checksecurity (una herramienta similar a sectool
+pero para distribuciones Debian) mediante
+
+sudo apt-get install checksecurity
+
+[-- Image: gráficos3 --]
+
+Una vez instalado comprobamos que opciones tiene activadas por
+defecto y cambiamos las que nos interesen en el archivo de
+configuracion
+
+sudo vim /etc/checksecurity.conf
+
+Para la comprobación de la integridad de los ficheros,
+checksecurity se basa en tripwire, que es una herramienta que
+guarda un hash de los archivos del sistema para comprobar si
+alguno falta o ha sido modificado, para que tripwire funcione
+correctamente hay que primero crear una key
+
+sudo twadmin -m G -L /etc/tripwire/site.key
+
+luego editamos el archivo /etc/tripwire/twcfg.txt y lo volcamos
+al archivo de configuracion, que está cifrado mediante el
+comando
+
+sudo twadmin -m F -S /etc/tripwire/site.key -c
+/etc/tripwire/tw.cfg /etc/tripwire/twcfg.txt
+
+Si queremos comproabar manualmente si nuestros archivos han sido
+cambiados solo tenemos que ejecutar el comando
+
+tripwire -m c 
+
+Aunque podemos confiar en checksecurity que ejecutara estos
+comandos periodicamente y nos mandará e-mails al root y a donde
+configuremos si algo sucede
+
+Actividad 3.4:
+
+Hemos instalado la herramienta incron mediante
+
+apt-get install incron
+
+[-- Image: gráficos4 --]
+
+como podemos ver ya se ha iniciado el demonio, aunque podriamos
+lanzarlo nosotros mediante
+
+sudo /etc/init.d/incron start
+
+Debemos agregar los usuarios que deseemos que usen incron
+editando el archivo
+
+sudo vim /etc/incron.allow
+
+Una vez hecho esto ya podemos ejecutar
+
+incrontab -e
+
+y podemos agregar la siguiente linea:
+
+/tmp IN_ALL_EVENTS echo “$@/$# $%”
+
+recargamos la tabla de reglas usando
+
+incrontab -d
+
+A continuación creamos un fichero en /tmp
+
+touch /tmp/prueba
+
+El comando echo manda la salida al log del sistema, por lo tanto
+hacemos:
+
+sudo tail /var/log/syslog
+
+y vemos lo que pinta incron en el log del sistema
+
+[-- Image: gráficos5 --]
+

@@ -1,0 +1,284 @@
+
+SEGURIDAD EN SISTEMAS OPERATIVOS
+
+4º Grado en Informática
+
+Curso 2014-15
+
+Cuestionario de autoevaluación
+
+correspondiente a
+
+Práctica 1.- Administración de la seguridad en Linux
+
+Sesión 4 (Modificación de la 3).- Seguridad básica en Linux:
+herramientas (ii)
+
+1.- Cuestiones Introducción
+
+1.- Indica qué cuestiones del guión te han resultado más
+difíciles de seguir:
+
+2.- Cuál crees que es la razón:
+
+a) No están bien explicadas:
+
+b) Necesito más ejemplos:
+
+c) No lo recuerdo bien de Sistemas Operativos (2º Curso):
+
+d) Otra (indicar si es el caso):
+
+3.- A esta Sesión le he dedicado: 2 (horas)
+
+4.- Comenta, si lo crees necesario, algún aspecto que creas
+relevante y que no este planteado en las cuestiones previas:
+
+2.- Actividades
+
+Mis soluciones dadas a las actividades planteadas en la Sesión
+son:
+
+Actividad 3.1:
+
+a) Para qué sirve cada grupo de herramientas
+
+Recopilación de Información
+
+Para obtener información de los objetivos a atacar/analizar
+
+Análisis de Vulnerabilidades
+
+Para localizar las posibles vulnerabilidades de los objetivos
+
+Aplicaciones Web
+
+Multiples herramientas web, para escaneo de vulnerabilidades,
+consulta, ataque, etc...
+
+Ataques de contraseñas
+
+Para atacar contraseñas mediante fuerza bruta, generadores de
+diccionarios, etc..
+
+Ataques Wireless
+
+Para localizar passwords de claves wifi, crear honeypots, etc..
+
+Herramientas de Explotación
+
+Para explotar vulnerabilidades conocidas
+
+Husmeando/Envenenando
+
+Para fisgonear en objetivos, y suplantar identidades (poisoning)
+
+Manteniendo Acceso
+
+Puertas traseras a sistemas a los que hayamos accedido
+
+Ingeniería Reversa
+
+Para descompilar/depurar software
+
+Pruebas de Stress
+
+Para generar ataques de denegación de servicio, saturar
+hardware, etc...
+
+Hackeo de Hardware
+
+Para acceder a registros hardware para consultar datos, cambiar
+cosas, como liberar moviles, etc...
+
+Forensia
+
+Para accer analisis forense de discos duros, servidores,
+ficheros, etc...
+
+Herramientas de Reporte
+
+Para reportar el trabajo de analisis/ataque que hayamos hecho
+
+b) Comentar una herramienta, de vuestra elección, por grupo.
+
+Recopilación de Información
+
+nmap: Escaner de redes, nos puede listar los equipos conectados
+a una red, así como obtener información de los mismos
+
+Análisis de Vulnerabilidades
+
+golismero: Detecta vulnerarabilidades web en aplicaciones
+
+Aplicaciones Web
+
+wpscan: Escanea vulnerabilidades de una instalación de Wordpress
+
+Ataques de contraseñas
+
+pyrit: Herramienta para comprobar hashes PMK de WPA/WPA2
+utilizando la gpu consiguiendo reducir mucho el tiempo de
+ejecución
+
+Ataques Wireless
+
+aircrack-ng: Suite de herramientas para hackear claves wifi, la
+mas famosa la propia aircrack-ng, que localiza la clave
+mediante fuerza bruta/diccionario, y airodump-ng que hace un
+volcado de la información que captura una tarjeta wifi en modo
+monitor.
+
+Herramientas de Explotación
+
+metasploit: Una suite para facilitar el uso, desrrollo y
+divulgacion de exploits, licencia libre/comercial
+
+Husmeando/Envenenando
+
+wireshark: Sniffer de paquetes de red, anteriormente conocido
+como Ethereal
+
+Manteniendo Acceso
+
+weevely: Herramienta para instalar un cliente telnet en php en
+servidores en los que hayamos conseguido acceder
+
+Ingeniería Reversa
+
+apktool: Descompilador de aplicaciones android (.apk), extrae
+toda la información e inlcuso puede reconstruir las clases java
+
+
+Pruebas de Stress
+
+reaver: Herramienta de fuerza bruta para sacar una clave WPA de
+routers que tengan activado el estándar WPS
+
+Hackeo de Hardware
+
+arduino: SDK oficial de arduino
+
+Forensia
+
+foremost: Herramienta de recuperacion de información de discos
+duros en base a las cabeceras de los ficheros, es similar a
+testdisk
+
+Herramientas de Reporte
+
+recordmydesktop: Herramienta para grabar lo que pasa en nuestro
+escritorio en formato ogg vorbis
+
+Actividad 3.2:
+
+a) Ver las vulnerabilidades mostradas e indicar como tendríamos
+que solucionarlas.
+
+Warnings:
+
+----------------------------
+
+Version of Lynis very outdated [test:NONE]
+
+Solucion: actualizar la herramienta
+
+Found one or more vulnerable packages. [test:PKGS-7392]
+
+Desinstalar los paquetes apt vulnerables
+
+Couldn't find 2 responsive nameservers [test:NETW-2705]
+
+Deberiamos tener dos DNS en lugar de uno solo
+
+PHP option expose_php is possibly turned on, which can reveal
+useful information for attackers. [test:PHP-2372]
+
+Deshabilitar el dar informacion de php en los headers de apache
+y con la funcion phpinfo();
+
+Suggestions:
+
+----------------------------
+
+update to the latest stable release.
+
+Recomiendan actualizar a la ultima version (normal)
+
+Install a PAM module for password strength testing like
+pam_cracklib or pam_passwdqc [test:AUTH-9262]
+
+Instalar un modulo para que el sistema me pida contraseñas mas
+dificiles
+
+Configure password aging limits to enforce password changing on
+a regular base [test:AUTH-9286]
+
+Configurar la caducidad de las contraseñas
+
+Disable drivers like USB storage when not used, to prevent
+unauthorized storage or data theft [test:STRG-1840]
+
+Desactivar el modulo usb_storage para que nadie pueda conetar un
+pendrive y robarme informacion
+
+Disable drivers like firewire storage when not used, to prevent
+unauthorized storage or data theft [test:STRG-1846]
+
+Desactivar el modulo firewire_storage para que nadie pueda
+conetar un pendrive y robarme informacion
+
+Purge old/removed packages (6 found) with aptitude purge or dpkg
+--purge command. This will cleanup old configuration files, cron
+jobs and startup scripts. [test:PKGS-7346]
+
+Quitar configuracion de paquetes obsoleta (purgado)
+
+Update your system with apt-get update, apt-get upgrade, apt-get
+dist-upgrade and/or unattended-upgrades [test:PKGS-7392]
+
+Actualizar el sistema regularmente (normal)
+
+Check your resolv.conf file and fill in a backup nameserver if
+possible [test:NETW-2705]
+
+Configurar un dns de reserva
+
+Install Apache mod_evasive to guard webserver against DoS/brute
+force attempts [test:HTTP-6640]
+
+Instalar el modulo de apache mod_evasive para evitar ataques DoS
+
+Use NTP daemon or NTP client to prevent time issues.
+[test:TIME-3104]
+
+Usar la sincronizacion de hora con relojes atómicos para evitar
+problemas de fechas, ya que se usan para los certificados y mas
+cosas.
+
+Install a file integrity tool [test:FINT-4350]
+
+Instalr una herramienta de control de la integridad de ficheros
+
+Harden the system by removing unneeded compilers. This can
+decrease the chance of customized trojans, backdoors and
+rootkits to be compiled and installed [test:HRDN-7220]
+
+Quitar los compiladores que no vayamos a usar
+
+[Muchas sugerencias mas...]
+
+b) Comentar al menos 3 opciones de la herramienta.
+
+lynis –check-update
+
+Comprueba si hay una nueva versión de lynis
+
+lynis --check-all (-c)
+
+Hace un chequeo completo del sistema
+
+lynis--quick (-Q)
+
+Hace un chequeo pero sin ir pidiendo confirmacion al usuario
+

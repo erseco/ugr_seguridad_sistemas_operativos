@@ -1,0 +1,168 @@
+
+SEGURIDAD EN SISTEMAS OPERATIVOS
+
+4º Grado en Informática
+
+Curso 2014-15
+
+Cuestionario de autoevaluación correspondiente a
+
+Práctica 1.- Administración de la seguridad en Linux
+
+Sesión 4.- SELinux
+
+1.- Cuestiones Introducción
+
+1.- Indica qué cuestiones del guión te han resultado más
+difíciles de seguir:
+
+2.- Cuál crees que es la razón:
+
+a) No están bien explicadas:
+
+b) Necesito más ejemplos:
+
+c) No lo recuerdo bien de Sistemas Operativos (2º Curso):
+
+d) Otra (indicar si es el caso):
+
+3.- A esta Sesión le he dedicado: 2 (horas)
+
+4.- Comenta, si lo crees necesario, algún aspecto que creas
+relevante y que no este planteado en las cuestiones previas:
+
+Esta práctica ha sido realizada sobre una instalación limpia y
+actualizada de Fedora 20 Mate para 64 bits.
+
+He instalado el interfaz visual de administración mediante la
+orden:
+
+yum install setools-console policycoreutils-gui
+system-config-services
+
+aunque al final no las he utilizado, ya que al final era mas
+cómodo usar el terminal.
+
+2.- Actividades
+
+Mis soluciones dadas a las actividades planteadas en la Sesión
+son:
+
+Actividad 2.1: Crear un usuario SELinux denominado admin con el
+rol sysadm_r.
+
+Creamos un usuario con la opción de crear su directorio en
+“/home”:
+
+useradd -m admin
+
+Creamos un usuario SELinux admin_u con el rol sysadm_r
+
+[root@localhost ernesto]# semanage user --roles 'sysadm_r'
+--prefix user --add admin_u
+
+Vinculamos el usuario SELinux con el usuario del sitema
+
+[root@localhost ernesto]# semanage login --add --seuser admin_u
+admin
+
+Le establecemos un password al usuario admin
+
+[root@localhost ernesto]# passwd admin
+
+Cambiamos el contexto de seguridad para el directorio “home” del
+usuario con la orden chcon
+
+[root@localhost ernesto]# chcon -R -u admin_u /home/admin/
+
+Actividad 2.2: Localiza algunos mensajes de los logs de tu
+sistema, o genéralos, y describe la denegación que producen.
+
+Intentamos hacer su y introducimos una contraseña incorrecta,
+mostramos la informacion del log con:
+
+[root@localhost ernesto]# ausearch -ts recent
+
+y nos devuelve:
+
+time->Mon Nov 3 23:57:14 2014
+
+type=USER_AUTH msg=audit(1415055434.297:769): pid=26409 uid=1001
+auid=1000 ses=1
+subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
+msg='op=PAM:authentication acct="root" exe="/usr/bin/su"
+hostname=? addr=? terminal=pts/2 res=failed'
+
+Actividad 2.3: Indicar la orden que debemos ejecutar para pasar
+de un estado permisivo a uno obligatorio.
+
+Podemos usar el comando “setenforce” para cambiar entre los
+modos obligatorio/permisivo. Los cambios hechos con setenforce
+no sobreviven a un reinicio. Para cambiar a modo obediente,
+ejecutaremos:
+
+[root@localhost ernesto]# setenforce 1
+
+y para modo permisivo usaremos:
+
+[root@localhost ernesto]# setenforce 0
+
+En ambos casos, podemos comprobar el modo con el comando
+“getenforce”
+
+[root@localhost ernesto]# getenforce
+
+Enforcing
+
+O con el comando “sestatus”
+
+[root@localhost ernesto]# sestatus
+
+SELinux status: enabled
+
+SELinuxfs mount: /sys/fs/selinux
+
+SELinux root directory: /etc/selinux
+
+Loaded policy name: targeted
+
+Current mode: permissive
+
+Mode from config file: enforcing
+
+Policy MLS status: enabled
+
+Policy deny_unknown status: allowed
+
+Max kernel policy version: 29
+
+Actividad 2.4: Completar la tabla anterior para la distribución
+de Linux que esté usando cada uno de vosotros.
+
+Se extrae la información con las herramientas sestatus, seinfo y
+seinfo -aubac_constrained_type -x
+
+Distribution
+
+Policy Store Name
+
+MLS?
+
+deny_unknown
+
+Uncofined domains?
+
+UBAC?
+
+Fedora 20
+
+targeted
+
+enabled
+
+allowed
+
+si
+
+si
+

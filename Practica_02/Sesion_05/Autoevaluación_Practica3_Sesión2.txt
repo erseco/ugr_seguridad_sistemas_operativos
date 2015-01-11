@@ -1,0 +1,154 @@
+
+SEGURIDAD EN SISTEMAS OPERATIVOS
+
+4º Grado en Informática
+
+Curso 2014-15
+
+Cuestionario de autoevaluación correspondiente a
+
+Práctica 3.- Ingeniería inversa en Linux
+
+Sesión 2- 1.- Explotaciones y protecciones del formato ELF
+
+1.- Cuestiones Introducción
+
+1.- Indica qué cuestiones del guión te han resultado más
+difíciles de seguir:
+
+2.- Cuál crees que es la razón:
+
+a) No están bien explicadas:
+
+b) Necesito más ejemplos:
+
+c) No lo recuerdo bien de Sistemas Operativos (2º Curso):
+
+d) Otra (indicar si es el caso):
+
+3.- A esta Sesión le he dedicado: _____ (horas)
+
+4.- Comenta, si lo crees necesario, algún aspecto que creas
+relevante y que no este planteado en las cuestiones previas:
+
+2.- Actividades
+
+Mis soluciones dadas a las actividades planteadas en la Sesión
+son:
+
+Actividad 8.1:
+
+Para el sistema que utilizas, indica la arquitectura,
+distribución y compilador que
+
+utilizas e indica que protecciones se utilizan de cara a
+proteger un binario ELF.
+
+Arquitectura:
+
+x86_64 (AMD64)
+
+Distribución:
+
+Debian GNU/Linux 7.7 (wheezy)
+
+Compilador:
+
+gcc (Debian 4.7.2-5) 4.7.2
+
+Protecciones:
+
+Podemos ver en la documentación de debian el “hardening”
+aplicado a la misma: https://wiki.debian.org/Hardening
+
+Basicamente hay proteccion tanto en espacio de usuario como en
+modo kernel (user space y kernel space)
+
+User SpaceStack Protector (protector de pila)
+
+Intenta detectar cuando una pila se ha sobrescrito y aborta el
+programa. Ubuntu ha tenido esta activada de forma
+predeterminada desde Edgy. Algunos programas no funcionan bien
+con él, y se puede usar -fno-stack-protector.
+
+Heap protection (protector de heap)
+-----------------------------------
+
+Incluido por defecto en glibc2.5
+
+libc pointer encryption (encriptación de punteros de la libc)
+
+In mainline glibc, as PTR_MANGLE.
+
+gcc -D_FORTIFY_SOURCE=2 -O1
+
+Protección en tiempo de compilación contra desbordamientos de
+búfer de tamaño estático. No se conocen regresiones o pérdida
+de rendimiento. Esto está habilitado para todo el sistema
+
+gcc -Wformat -Wformat-security
+
+Si bien no todos los programas implementan correctamente los
+consejos printf (como la macro G_GNUC_PRINTF), añadiendo esto
+al menos se evitan vulnerabilidades simples de cadena de
+formato de printf. Cualquier programa cuyo construye convertido
+"ruidoso", como resultado, deben fijarse de todos modos.
+
+Kernel Spacenon-exec memory segmentation (ExecShield)
+
+Detiene la ejecución de código en el heap / pila. Específico
+para i386 (nx ya hace esto para amd64), e introduce una pequeña
+nivel de pérdida de rendimiento (5% de CPU).
+
+-fstack-protector
+
+Is available for amd64 builds:
+
+config CC_STACKPROTECTOR
+
+validación de asignación de memoria en tiempo de ejecución
+
+Actividad 8.2:
+
+Podemos mejorar el siguiente virus:
+
+a) Escribiendo un mejor scaner/limpiador para él.
+
+Quizás se podría mejorar el virus salteando el lugar donde lo
+introducimos pero esto haría mas difícil crear un limpiador,
+pues en vez de truncar el fichero para eliminarlo habría que
+analizar en que parte comienza el virus, y si encima le
+agregamos algunos datos aleatorios sería todavía mas difícil,
+ya que no podría buscarse por tamaño completo.
+
+b) Añadir #ifdef para comprobar la arquitectura de forma que
+cambie de forma automática el valor EM_386 en tiempo de
+compilación para adaptarlo al sistema donde estemos
+
+#ifdef __amd64__
+
+if (ehdr.e_machine != EM_X86_64) return 1; // AMD64
+
+#elif __arm__
+
+if (ehdr.e_machine != EM_ARM) return 1; // ARM
+
+#elif __ia64__
+
+if (ehdr.e_machine != EM_IA_64) return 1; // Itanium (algunos
+servidores)
+
+#elif __POWERPC__
+
+if (ehdr.e_machine != EM_PPC) return 1; // PowerPC
+
+#elif __sparc__
+
+if (ehdr.e_machine != EM_SPARC) return 1; // SPARC
+
+#else
+
+if (ehdr.e_machine != EM_386) return 1; // 386 (por defecto)
+
+#endif
+

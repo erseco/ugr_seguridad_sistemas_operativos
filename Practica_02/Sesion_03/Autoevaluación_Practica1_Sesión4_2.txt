@@ -1,0 +1,175 @@
+
+SEGURIDAD EN SISTEMAS OPERATIVOS
+
+4º Grado en Informática
+
+Curso 2014-15
+
+Cuestionario de autoevaluación correspondiente a
+
+Práctica 1.- Seguridad en Linux
+
+Sesión 4-2- AppArmor
+
+1.- Cuestiones Introducción
+
+1.- Indica qué cuestiones del guión te han resultado más
+difíciles de seguir:
+
+2.- Cuál crees que es la razón:
+
+a) No están bien explicadas:
+
+b) Necesito más ejemplos:
+
+c) No lo recuerdo bien de Sistemas Operativos (2º Curso):
+
+d) Otra (indicar si es el caso):
+
+3.- A esta Sesión le he dedicado: _____ (horas)
+
+4.- Comenta, si lo crees necesario, algún aspecto que creas
+relevante y que no este planteado en las cuestiones previas:
+
+2.- Actividades
+
+Mis soluciones dadas a las actividades planteadas en la Sesión
+son:
+
+Actividad 6.1:
+
+En ubuntu-mate 14.10 tengo habilitados los siguientes perfiles:
+
+ernesto@ernesto-virtual-machine:~$ sudo apparmor_status
+
+[sudo] password for ernesto:
+
+apparmor module is loaded.
+
+11 profiles are loaded.
+
+11 profiles are in enforce mode.
+
+/sbin/dhclient
+
+/usr/lib/NetworkManager/nm-dhcp-client.action
+
+/usr/lib/connman/scripts/dhclient-script
+
+/usr/lib/cups/backend/cups-pdf
+
+/usr/lib/lightdm/lightdm-guest-session
+
+/usr/lib/lightdm/lightdm-guest-session//chromium
+
+/usr/sbin/cups-browsed
+
+/usr/sbin/cupsd
+
+/usr/sbin/cupsd//third_party
+
+/usr/sbin/ntpd
+
+/usr/sbin/tcpdump
+
+0 profiles are in complain mode.
+
+4 processes have profiles defined.
+
+4 processes are in enforce mode.
+
+/sbin/dhclient (8230)
+
+/usr/sbin/cups-browsed (1872)
+
+/usr/sbin/cupsd (5323)
+
+/usr/sbin/ntpd (8400)
+
+0 processes are in complain mode.
+
+0 processes are unconfined but have a profile defined.
+
+Los perfies se almacenan en /etc/apparmor.d/
+
+ernesto@ernesto-virtual-machine:/etc/apparmor.d$ ls
+
+abstractions lightdm-guest-session usr.bin.firefox
+usr.sbin.rsyslogd
+
+cache local usr.sbin.cups-browsed usr.sbin.tcpdump
+
+disable sbin.dhclient usr.sbin.cupsd
+
+force-complain tunables usr.sbin.ntpd
+
+Analizamos el perfil de tcpdump (en
+/etc/apparmior.d/usr.sbin.tcpdump)
+
+Tcpdump es una herramienta que podemos usar para hacer volcados
+de datos de la red.
+
+Vemos que por ejemplo se le permite acceder a los paquetes de
+red en modo raw, y que ademas le restringe donde puede leer y
+escribir del disco para guardar los archivos de log, además
+permite establecer setuid para establecer permisos de root y le
+permite acceder a dispositivos de red y a dispositivos usb.
+
+Actividad 6.2:
+
+He creado un perfil para la aplicación spotify para linux, que
+al ser software propietario no podemos ver el código y podría
+estar accediendo a sitios del disco que no debiera:
+
+# Author: Ernesto Serrano <erseco@correo.ugr.es>
+
+#include <tunables/global>
+
+/usr/bin/spotify {
+
+#include <abstractions/base>
+
+#include <abstractions/fonts>
+
+#include <abstractions/kde>
+
+#include <abstractions/nameservice>
+
+# Permitimos acceder a las librerías QT
+
+/etc/xdg/Trolltech.conf rk,
+
+/etc/xdg/sni-qt.conf r,
+
+# Permitimos el acceso a los recursos de imagenes
+
+/usr/share/icons/*.theme k,
+
+/usr/share/spotify/theme/**.{png,ico} r,
+
+/usr/share/spotify/theme/**.{splang,xml} r,
+
+#Permitimos leer los procesos
+
+owner @{PROC}/[0-9]*/task/ r,
+
+# Permitimos leer y escribir en los directorios del caché tanto
+del programa como de QT
+
+# así como la configuración del programa
+
+owner @{HOME}/.cache/spotify/ rw,
+
+owner @{HOME}/.cache/spotify/** rw,
+
+owner @{HOME}/.config/Trolltech.conf rw,
+
+owner @{HOME}/.config/spotify/ w,
+
+#Permitimos leer los archivos que tenga el usuario en su carpeta
+~/Musica
+
+owner @{HOME}/Musica/** r,
+
+}
+

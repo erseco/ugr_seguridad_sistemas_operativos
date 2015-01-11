@@ -1,0 +1,158 @@
+
+SEGURIDAD EN SISTEMAS OPERATIVOS
+
+4º Grado en Informática
+
+Curso 2014-15
+
+Cuestionario de autoevaluación correspondiente a
+
+Práctica 2.- Encriptación/Desencriptación en Linux
+
+Sesión 1- Encriptación en Linux
+
+1.- Cuestiones Introducción
+
+1.- Indica qué cuestiones del guión te han resultado más
+difíciles de seguir:
+
+2.- Cuál crees que es la razón:
+
+a) No están bien explicadas:
+
+b) Necesito más ejemplos:
+
+c) No lo recuerdo bien de Sistemas Operativos (2º Curso):
+
+d) Otra (indicar si es el caso):
+
+3.- A esta Sesión le he dedicado: 2 (horas)
+
+4.- Comenta, si lo crees necesario, algún aspecto que creas
+relevante y que no este planteado en las cuestiones previas:
+
+2.- Actividades
+
+Mis soluciones dadas a las actividades planteadas en la Sesión
+son:
+
+Actividad 5.1:
+
+Mi clave pública:
+
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+Version: GnuPG/MacGPG2 v2.0.22 (Darwin)
+
+Comment: GPGTools - https://gpgtools.org
+
+mQENBFRl68gBCADxwRUfhHAQmQ31QMJ8n7D58pjIcCZ87LMreLI03+W1Ji8ax5hP
+
+4b19O7lTMEQ76oFHUPc/G0yVqUQLwnwbIAJ79/xT+qsLqiX81sy8VIptOAa/0iJa
+
+gVOzDJNtI5EDSdrHjwqIU1+wPc0ZYKhbX/gmiYqfeswNFqxZ/TSodGWdDwa+J8hk
+
+W+DUfxzBFIdOH4WUcuDioBL6GCdcqTef5op7hJdgrns5lc9M2AXiErsFFQMj6l5B
+
+RJ9lKKx830xfBiLDR0aMP4fb8zwhvqy6uMrHUSuAhLjcsdiFQuOrUe5AO5k0qwFS
+
+0iDRDXHqH/CSBgb2AL4Ws35/tO3iDWkm4ZJVABEBAAG0IUVybmVzdG8gU2VycmFu
+
+byA8aW5mb0Blcm5lc3RvLmVzPokBPQQTAQoAJwUCVGXryAIbAwUJCWYBgAULCQgH
+
+AwUVCgkICwUWAgMBAAIeAQIXgAAKCRBtI4jg8wTIq8NACACg+iUC1v4ZLTNv0qZc
+
+2rLGNFfsWAmHsVgb2yY0JPqsP9eKXCrVVwsnBibB2cWak8wchehxeTmSyRysuo+d
+
+WyNAyBdiHghkL4EM+YSqXGc++tWToX1XaoJyqk7DK4CWjrZI/4CgtMMPxSHMR90A
+
+NPkHe8JjvQaV5tySU3kLXp/A6/oVyLva9G1GjOx+18u3BRb/tOprAgVxT/5ieQeP
+
+eRpkCH6IZPRcxnuHyItaltB6xdL0Y1/lZNd3GN1Pg1Ayff0hQkGJqlAYupc8g3Jp
+
+3C+V6QIqmlXDfsI6U9Lzq/NngJlcQfrJu1Z3jm/xE7iDb+VFLt3FrvhLc+MDdoqQ
+
+O247uQENBFRl68gBCAC6sgb6qJt2TzIZclRvX8Tpk3utVfnQZcxCeqXtL6iM/8QA
+
+Lrtg2kg5uoF2nAj/rYRE5vwKfiY0GGsT6rkkKO0M7NbzgxjvXuV55NUwNOjI5Dfk
+
+o+vU/LG3BrVKSIFfgzjEGL8Ohb4GPGShI89fRPt8ENy11KJxooQ3ebcpM3rb0/SM
+
+wdC77EHoyTltKs7AzV6bIQRssNKBELoOKc9VUWbus0uhiS25jXqKbT+S4j/yN05f
+
+nry4myCMWC/fFKefucb2IcWiLkWSraZwgPvHWJZ1XgAWkN/CzR6KXcJv8j93ppYa
+
+lpSmuFDj7aOR/iDw2BmTm0N1tp45bdjI8pVaUS6lABEBAAGJASUEGAEKAA8FAlRl
+
+68gCGwwFCQlmAYAACgkQbSOI4PMEyKttIggAtELDYK4QjOB8FIbkcEqbmkzOCH8C
+
+Q7yPXGHuokasC75vlvTRbU7A5Csikvi3mK3sZdXderVPr//9jS9h0HQYIr/GHL68
+
+qD1xZF4dXhIQJYqqsKjNM0JRkqi6IdRW5DA1Zs4x1N0BucMNd3tD5tD8AkiiqCzw
+
+9Ac8y9p0EBaPKivoHBcXzMwoin0mhIo5o9KkCbf8AbzoBamP2Go5TipUb8kege9f
+
+44ti9aRW5WLBAeq6/8FCJkxfAaTwlGDW8HxwVRZ/CunHqkVB94JZaFljVoPE9LXF
+
+Lbs75c/2gQn3A0ZVqhe/Kt8b0e1nbaCdQS09n6yVGOe4453jDWxuKeReaA==
+
+=PFFq
+
+-----END PGP PUBLIC KEY BLOCK-----
+
+Tambien lo he subido al keyserver de Ubuntu con el identificador
+F304C8AB, se puede obtener mediante:
+
+gpg --keyserver keyserver.ubuntu.com --recv-keys F304C8AB
+
+Esto es un mensaje cifrado con mi clave publica hecho por el
+compañero Rubén
+
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG v1
+
+hQEMA8gi3BnH3IaWAQgAt+oxNl2nS/3qtC3K03D02qbmeZgp6HffDjSBu2uAxCfl
+hTIYF/6z3LqjDoxy3vV3X5t63ml7aMSetriETXa4W/uyKZKEDhW4G1bpufEmUwIB
+OuXxcJpmneyRvAhj0Ta9IqcoJBKH3w+vouitU8n0hctVeSFt6BSH8KmbevY5JCCe
+UlYkBFIDVmmf/W2Aa3UEzP2t4fjp4WiIycw7K169u92EMBLcndepvmMo377zoMiD
+nEXqEG4wL6sW2kntBRCCseWepgEpriqTgEXE1AooitrpmK4hoc1u2vNIiEQSJIr1
+23JrtqjHUpoc0aIMs8gXVhRSRS/ruZ5Fo6G0oEh9JdJFAbZ2mVkTXB5edb5VfCCI
+glRHPrdXJzV33v4DY/uIvlErE3neAUV/xx7O98veHv+6h9Kx8YgzBvcVOQay1JIB
+0DuM7Jf1
+=9MLE
+-----END PGP MESSAGE-----
+
+Actividad 5.2:
+
+openssl enc -aes-256-cbc -in datos.txt -out encrypted.bin
+
+nos devuelve el fichero binario encriptado (previa introduccion
+de una constraseña)
+
+Podemos leer el fichero con:
+
+openssl enc -aes-256-cbc -d -in encrypted.bin (nos pedirá la
+contraseña)
+
+Actividad 5.3:
+
+a) ¿En que consiste la vulnerabilidad Heartbleed?
+
+En que un servidor que use OpenSSL no comprueba la longitud de
+la palabra leida, por lo que un cliente malicioso le puede
+decir que busque una palabra mas corta y espere una longitud
+mayor, dandole información abitraria
+
+b) ¿Cómo saber si mi sistema la sufre?
+
+Ejecutando el comando “openssl version” y viendo si la versión
+está dentro del rango 1.0.1 a 1.0.1f que son las versiones
+afectadsa, en mi maquina actualmente tengo la version OpenSSL
+0.9.8za 5 Jun 2014, por lo que no estoy afectado
+
+c) ¿Cómo puede subsanarla?
+
+Cambiando a una versión que no esté afectada
+
+Mas información en https://es.wikipedia.org/wiki/Heartbleed
+

@@ -1,0 +1,142 @@
+
+SEGURIDAD EN SISTEMAS OPERATIVOS
+
+4º Grado en Informática
+
+Curso 2014-15
+
+Cuestionario de autoevaluación correspondiente a
+
+Práctica 2.- Encriptación/desencriptación en Linux
+
+Sesión 2.- Encriptación de archivos y sistemas de archivos.
+Esteganografía y estegoanálisis.
+
+1.- Cuestiones Introducción
+
+1.- Indica qué cuestiones del guión te han resultado más
+difíciles de seguir:
+
+2.- Cuál crees que es la razón:
+
+a) No están bien explicadas:
+
+b) Necesito más ejemplos:
+
+c) No lo recuerdo bien de Sistemas Operativos (2º Curso):
+
+d) Otra (indicar si es el caso):
+
+3.- A esta Sesión le he dedicado: _____ (horas)
+
+4.- Comenta, si lo crees necesario, algún aspecto que creas
+relevante y que no este planteado en las cuestiones previas:
+
+2.- Actividades
+
+Mis soluciones dadas a las actividades planteadas en la Sesión
+son:
+
+Actividad 6.1:
+
+Instalamos el software
+
+ernesto@debian:~$ sudo apt-get install cryptsetup
+
+Listamos las particiones
+
+ernesto@debian:~$ sudo fdisk -l
+
+Disposit. Inicio Comienzo Fin Bloques Id Sistema
+
+/dev/sdb1 * 1 3966975 1983487+ b W95 FAT32
+
+Desmontamos el dispositivo si se ha montado automáticamente
+
+ernesto@debian:~$ sudo umount /dev/sdb1
+
+Creamos el volumen cifrado, nos pedirá confirmación con YES y la
+contraseña
+
+ernesto@debian:~$ sudo cryptsetup -c aes -h sha256 -y -s 256
+luksFormat /dev/sdb1
+
+WARNING!
+
+========
+
+This will overwrite data on /dev/sdb1 irrevocably.
+
+Are you sure? (Type uppercase yes): YES
+
+Nos pide una contraseña
+
+ernesto@debian:~$ sudo cryptsetup luksOpen /dev/sdb1 test
+
+ernesto@debian:~$ sudo mkfs /dev/mapper/test
+
+Creamos una carpeta en /mnt con permisos 777 donde montaremos el
+dispositivo
+
+ernesto@debian:~$ sudo mkdir /mnt/prueba
+
+ernesto@debian:~$ sudo chmod 777 /mnt/prueba/
+
+ernesto@debian:~$ sudo mount /dev/mapper/test /mnt/prueba
+
+Lo desmontamos
+
+ernesto@debian:~$ sudo cryptsetup luksClose /dev/mapper/test
+
+Ahora cada vez que conectemos el pen a Debian nos pedirá la
+contraseña automáticamente, un fallo que le veo es que al ser
+un sistema de archivos no soportado, al conectarlo a Mac (quizá
+en windows pase tambien) nos sugiere formatearlo, con el grave
+problema que ello conlleva.
+
+Actividad 6.2:
+
+Instalamos el paquete steghide de los repositorios
+
+ernesto@debian:~$ sudo apt-get install steghide
+
+Ocultamos un fichero de texto en una imagen (nos pedira un
+“salvoconducto” (contraseña))
+
+ernesto@debian:~$ steghide embed -cf imagen.jpg -ef file.txt
+
+Anotar salvoconducto:
+
+Re-ingresar salvoconducto:
+
+adjuntando "file.txt" en "imagen.jpg"... hecho
+
+Extraemos el texto oculto
+
+ernesto@debian:~$ steghide extract -sf imagen.jpg
+
+Anotar salvoconducto:
+
+ya existe el archivo "file.txt". ¿lo sobreescribo? (s/n) s
+
+anota los datos extraidos e/"file.txt".
+
+Actividad 6.3:
+
+Descargamos el programa, arrastramos los módulos tal y como
+aparecen en la imagen
+
+[-- Image: gráficos1 --]
+
+Al darle al botón verde nos generara los siguientes resultados:
+
+Para imagen sin datos ocultos:
+
+"1","0","LSB-RS","Display","/home/ernesto/imagen.jpg","800x600","0.0","no
+results"
+
+Para imagen con datos ocultos:
+
+"0","0","Input","LSB-RS","/home/ernesto/imagen.jpg","800x600","0.0","Estimated
+message size [B]:8127.704066641413"
+

@@ -1,0 +1,137 @@
+
+SEGURIDAD EN SISTEMAS OPERATIVOS
+
+4º Grado en Informática
+
+Curso 2014-15
+
+Cuestionario de autoevaluación correspondiente a
+
+Práctica 3.- Auditoría informática e Informática forense
+
+Sesión 1.- Análisis forense con herramientas estándares de Linux
+
+1.- Cuestiones Introducción
+
+1.- Indica qué cuestiones del guión te han resultado más
+difíciles de seguir:
+
+2.- Cuál crees que es la razón:
+
+a) No están bien explicadas:
+
+b) Necesito más ejemplos:
+
+c) No lo recuerdo bien de Sistemas Operativos (2º Curso):
+
+d) Otra (indicar si es el caso):
+
+3.- A esta Sesión le he dedicado: _____ (horas)
+
+4.- Comenta, si lo crees necesario, algún aspecto que creas
+relevante y que no este planteado en las cuestiones previas:
+
+2.- Actividades
+
+Mis soluciones dadas a las actividades planteadas en la Sesión
+son:
+
+Actividad 8.1:
+
+Como no tenía un pendrive a mano he creado un disco virtual de
+250MB
+
+Lo listo mediante fdisk
+
+ernesto@debian:~$ sudo fdisk -l /dev/sdb
+
+Disco /dev/sdb: 268 MB, 268435456 bytes
+
+163 heads, 2 sectors/track, 1608 cylinders, 524288 sectores en
+total
+
+Units = sectores of 1 * 512 = 512 bytes
+
+Sector size (logical/physical): 512 bytes / 512 bytes
+
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+
+Identificador del disco: 0x000a7c98
+
+Disposit. Inicio Comienzo Fin Bloques Id Sistema
+
+/dev/sdb1 2048 524287 261120 b W95 FAT32
+
+Lo guardo a disco, por si acaso:
+
+sudo fdisk -l /dev/sdb > fdisk.disco1
+
+Hago una copia del disco
+
+ernesto@debian:~$ sudo dd if=/dev/sdb1 of=imagen.disco1 bs=512
+
+522240+0 registros leídos
+
+522240+0 registros escritos
+
+267386880 bytes (267 MB) copiados, 1,60904 s, 166 MB/s
+
+Lo ponemos como solo lectura
+
+ernesto@debian:~$ chmod 444 imagen.disco1
+
+Creamos un directorio donde montar el dispositivo
+
+sudo mkdir /mnt/analisis
+
+ernesto@debian:~$ sudo mount -t vfat -o,noexec,loop
+/imagen.disco1 /mnt/analisis
+
+Hacemos un sha512sum del archivo (usamos 512 porque debian no
+tiene el 2 y el 1 es inseguro)
+
+ernesto@debian:~$ sudo sha512sum /dev/sdb1 > SHA.disco
+
+El hash es:
+
+7a4f4c79236571a529308e584c03c827fb2d84bf8b8d1b7a40776300955aabebc4b731f4cb831b9cfe7067acdd80a589075c9034fbad07614323c01685c8c5af
+/dev/sdb1
+
+En el disco habiamos creado previamente un archivo llamado
+virus.txt
+
+ernesto@debian:~$ sudo vi /mnt/analisis/virus.txt
+
+ernesto@debian:~$ cat /mnt/analisis/virus.txt
+
+Este es un mensaje de virus para el rescate de archivos
+
+debe pagar y no llame a la policia
+
+Borramos el archivo:
+
+ernesto@debian:~$ sudo rm /mnt/analisis/virus.txt
+
+Creamos una lista de busqueda:
+
+echo virus > listaBusqueda.txt
+
+echo rescate >> listaBusqueda.txt
+
+Buscamos...
+
+ernesto@debian:~$ grep -aibf listaBusqueda.txt imagen.disco1 >
+aciertos.txt
+
+Y vemos el resultado de la busqueda en el archivo aciertos:
+
+ernesto@debian:~$ cat aciertos.txt
+
+3291:U�������������������virtual
++i�E�E+i�E�virus#.txt�������IRUS TXT
+dkm�E�Ekm�E�p������������������������.viru�s.txt.sw�IRUST~1SWP
+im�E�Eim�E#0�virus .txt~�����U3210#"! ##Utp#####ad|�##�debe
+pagar y no llame a la policiaEste es un mensaje de virus para
+el rescate de archivosEste es un mensaje de virus para el
+rescate de archivos
+

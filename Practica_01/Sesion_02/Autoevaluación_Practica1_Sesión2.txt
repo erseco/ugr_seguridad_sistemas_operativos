@@ -1,0 +1,85 @@
+
+SEGURIDAD EN SISTEMAS OPERATIVOS
+
+4º Grado en Informática
+
+Curso 2014-15
+
+Cuestionario de autoevaluación
+
+correspondiente a
+
+Práctica 1.- Administración de la seguridad en Linux
+
+Sesión 2.- Seguridad básica en Linux: control de acceso
+
+1.- Cuestiones Introducción
+
+1.- Indica qué cuestiones del guión te han resultado más
+difíciles de seguir:
+
+Ninguna
+
+2.- Cuál crees que es la razón:
+
+a) No están bien explicadas:
+
+b) Necesito más ejemplos:
+
+c) No lo recuerdo bien de Sistemas Operativos (2º Curso):
+
+d) Otra (indicar si es el caso):
+
+3.- A esta Sesión le he dedicado: 2 (horas)
+
+4.- Comenta, si lo crees necesario, algún aspecto que creas
+relevante y que no este planteado en las cuestiones previas:
+
+2.- Actividades
+
+Mis soluciones dadas a las actividades planteadas en la Sesión
+son:
+
+Actividad 2.1:
+
+Creo un usuario ejecutando addsuer como root
+
+#adduser prueba
+
+le establezco el password que yo quiera
+
+cierro sesion y entro como usuario prueba, ejecuto el comando
+passwd y me solicita el antiguo y el nuevo password (x2), si le
+introduzco uno muy simple me tira para atrás, dice que es muy
+“weak” (sencillo), le pongo uno mas enrevesado
+
+Como no tengo acceso a los logs desde este usuario entro como
+root y los muestro
+
+cat /var/log/auth.log (en debian se guardan aquí los logs de
+autentificación), donde podemos encontrar los inicios de sesion
+así como los requerimientos de cambio de password
+
+Actividad 2.2:
+
+Editaríamos el archivo /etc/sudoers agregando la línea
+
+prueba ALL=(ALL) ALL
+
+con esto tendriamos privilegios de superusuario mediante sudo
+para el usuario prueba
+
+Actividad 2.3:
+
+Puedo hacer un cat ~/.bash_history para ver los 5 ultimos
+comandos introducidos en bash (es la configuración por defecto
+de debian, pero en otras distribuciones podría cambiar)
+
+A muchos de los logs de /var/log no tenemos acceso (dmesg,
+syslog, kern.log), sobre todo a los esenciales, esto es, sobre
+todo, para evitar modificaciones de los mismos, aunque si se
+permite la consulta en algunos sistemas con las herramientas de
+consulta, por ejemplo, el comando “dmesg” nos deja consultar el
+log de “/var/log/dmesg” aunque para limpiarlo (orden -c)
+necesitamos privilegios de superusuario
+

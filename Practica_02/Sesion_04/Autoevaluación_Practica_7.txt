@@ -1,0 +1,304 @@
+
+SEGURIDAD EN SISTEMAS OPERATIVOS
+
+4º Grado en Informática
+
+Curso 2014-15
+
+Cuestionario de autoevaluación correspondiente a
+
+Práctica 3.- Ingeniería Inversa en Linux
+
+Sesión 2.- El formato ELF (Executable and Linkable Format)
+
+1.- Cuestiones Introducción
+
+1.- Indica qué cuestiones del guión te han resultado más
+difíciles de seguir:
+
+2.- Cuál crees que es la razón:
+
+a) No están bien explicadas:
+
+b) Necesito más ejemplos:
+
+c) No lo recuerdo bien de Sistemas Operativos (2º Curso):
+
+d) Otra (indicar si es el caso):
+
+3.- A esta Sesión le he dedicado: _____ (horas)
+
+4.- Comenta, si lo crees necesario, algún aspecto que creas
+relevante y que no este planteado en las cuestiones previas:
+
+2.- Actividades
+
+Mis soluciones dadas a las actividades planteadas en la Sesión
+son:
+
+Actividad 7.1:.
+
+a)
+
+La sección .got.plt contiene datos binarios. La .got contiene
+punteros que apuntan a la PLT o a las funciones enlazadas
+dinámicamente.
+
+Por defecto la .got es rellenada dinámicamente mientras el
+programa esta en ejecución. La primera vez que una función es
+llamada, la .got contiene un puntero a la .plt donde el
+enlazador busca la posición actual de la función en cuestión .
+Cuando se encuentra su dirección, esta es escrita en la .got.
+La segunda vez que una función es llamada, la .got ya contiene
+la posición de esa función anteriormente llamada y no hace
+falta volver a buscarla. A esto se le llama “lazy binding”
+
+Codigo C:
+
+#include<stdio.h>
+
+main()
+
+{
+
+printf("Hola Mundo!");
+
+}
+
+Codigo C++:
+
+#include <iostream>
+
+int main()
+
+{
+
+std::cout << "Hola Mundo++!";
+
+}
+
+Compilación:
+
+ernesto@debian:~$ g++ -o hola++ hola.cpp
+
+ernesto@debian:~$ gcc -o hola hola.c
+
+Muestro las diferencias usando diff:
+
+ernesto@debian:~$ diff <(readelf -h hola) <(readelf -h hola++)
+
+11c11
+
+< Entry point address: 0x400400
+
+---
+
+> Entry point address: 0x400680
+
+13c13
+
+< Start of section headers: 2616 (bytes into file)
+
+---
+
+> Start of section headers: 3496 (bytes into file)
+
+Muestro algunas diferencias mas:
+
+ernesto@debian:~$ readelf -r hola
+
+Relocation section '.rela.dyn' at offset 0x370 contains 1
+entries:
+
+Offset Info Type Sym. Value Sym. Name + Addend
+
+0000006008b8 000300000006 R_X86_64_GLOB_DAT 0000000000000000
+__gmon_start__ + 0
+
+Relocation section '.rela.plt' at offset 0x388 contains 2
+entries:
+
+Offset Info Type Sym. Value Sym. Name + Addend
+
+0000006008d8 000100000007 R_X86_64_JUMP_SLO 0000000000000000
+printf + 0
+
+0000006008e0 000200000007 R_X86_64_JUMP_SLO 0000000000000000
+__libc_start_main + 0
+
+ernesto@debian:~$ readelf -r hola++
+
+Relocation section '.rela.dyn' at offset 0x560 contains 2
+entries:
+
+Offset Info Type Sym. Value Sym. Name + Addend
+
+000000600c10 000100000006 R_X86_64_GLOB_DAT 0000000000000000
+__gmon_start__ + 0
+
+000000600c80 000a00000005 R_X86_64_COPY 0000000000600c80
+_ZSt4cout + 0
+
+Relocation section '.rela.plt' at offset 0x590 contains 5
+entries:
+
+Offset Info Type Sym. Value Sym. Name + Addend
+
+000000600c30 000300000007 R_X86_64_JUMP_SLO 0000000000000000
+_ZNSt8ios_base4InitC1E + 0
+
+000000600c38 000400000007 R_X86_64_JUMP_SLO 0000000000000000
+__libc_start_main + 0
+
+000000600c40 000500000007 R_X86_64_JUMP_SLO 0000000000000000
+__cxa_atexit + 0
+
+000000600c48 000900000007 R_X86_64_JUMP_SLO 0000000000400660
+_ZNSt8ios_base4InitD1E + 0
+
+000000600c50 000700000007 R_X86_64_JUMP_SLO 0000000000000000
+_ZStlsISt11char_traits + 0
+
+b)
+
+Cambia sobre todo en la sección .got.ptl porque en c++ estamos
+haciendo una llamada a la funcion cout de la librería estándar
+y en .ctors y .dtors ya que los programas en C no es orientado
+a objetos por lo que no tenemos clases y por ende ni
+constructores ni destructores de las mismas, la explicación es
+la siguiente:
+
+.ctors Contiene punteros a constructores de C++.
+
+.dtors Contiene punteros a destructores de C++.
+
+c)
+
+Ejecutamos el comando readelf con el modificador -r y obtenemos
+lo siguiente:
+
+ernesto@debian:~$ readelf -r hola
+
+Relocation section '.rela.dyn' at offset 0x370 contains 1
+entries:
+
+Offset Info Type Sym. Value Sym. Name + Addend
+
+0000006008b8 000300000006 R_X86_64_GLOB_DAT 0000000000000000
+__gmon_start__ + 0
+
+Relocation section '.rela.plt' at offset 0x388 contains 2
+entries:
+
+Offset Info Type Sym. Value Sym. Name + Addend
+
+0000006008d8 000100000007 R_X86_64_JUMP_SLO 0000000000000000
+printf + 0
+
+0000006008e0 000200000007 R_X86_64_JUMP_SLO 0000000000000000
+__libc_start_main + 0
+
+Actividad 7.2:
+
+a)
+
+objdump nos permite hacer casi todo lo que hace readelf, e
+incluso mas cosas, ya que es una herramienta mas genérica,
+aunque hay parametros que funcionan parecido en algunos cambia
+la nomenclatura, estos son algunos:
+
+READELF
+
+OBJDUMP
+
+DESCRIPCION
+
+readelf -a
+
+objdump -x
+
+Muestra todo
+
+readelf -h
+
+objdump -h
+
+Muestra cabeceras
+
+readelf -S
+
+objdump -s
+
+Muestra secciones
+
+b)
+
+Con objdump podemos desensamblar y ver el código máquina de los
+ejecutables, así como ver la información de depuración (DWARF).
+
+
+Nota: según he leído en algunos foros de Internet, desde 2005
+readelf también permite ver algunas partes de la información de
+depuración (DWARF), aunque objdump es mas completa.
+
+Actividad 7.3:
+
+Le he agregado una llamada sleep(20); al programa hola.c para
+que espere 2 segundos antes de terminar
+
+Luego lo ejecutamos y este es el resultado en /proc
+
+ernesto@debian:~$ pidof hola
+
+26737
+
+ernesto@debian:~$ cat /proc/
+
+Display all 180 possibilities? (y or n)
+
+ernesto@debian:~$ cat /proc/26737/maps
+
+00400000-00401000 r-xp 00000000 08:01 783721 /home/ernesto/hola
+
+00600000-00601000 rw-p 00000000 08:01 783721 /home/ernesto/hola
+
+7ff21e9d1000-7ff21eb53000 r-xp 00000000 08:01 1046825
+/lib/x86_64-linux-gnu/libc-2.13.so
+
+7ff21eb53000-7ff21ed53000 ---p 00182000 08:01 1046825
+/lib/x86_64-linux-gnu/libc-2.13.so
+
+7ff21ed53000-7ff21ed57000 r--p 00182000 08:01 1046825
+/lib/x86_64-linux-gnu/libc-2.13.so
+
+7ff21ed57000-7ff21ed58000 rw-p 00186000 08:01 1046825
+/lib/x86_64-linux-gnu/libc-2.13.so
+
+7ff21ed58000-7ff21ed5d000 rw-p 00000000 00:00 0
+
+7ff21ed5d000-7ff21ed7d000 r-xp 00000000 08:01 1046822
+/lib/x86_64-linux-gnu/ld-2.13.so
+
+7ff21ef63000-7ff21ef66000 rw-p 00000000 00:00 0
+
+7ff21ef79000-7ff21ef7c000 rw-p 00000000 00:00 0
+
+7ff21ef7c000-7ff21ef7d000 r--p 0001f000 08:01 1046822
+/lib/x86_64-linux-gnu/ld-2.13.so
+
+7ff21ef7d000-7ff21ef7e000 rw-p 00020000 08:01 1046822
+/lib/x86_64-linux-gnu/ld-2.13.so
+
+7ff21ef7e000-7ff21ef7f000 rw-p 00000000 00:00 0
+
+7fff1b8fa000-7fff1b91b000 rw-p 00000000 00:00 0 [stack]
+
+7fff1b9ff000-7fff1ba00000 r-xp 00000000 00:00 0 [vdso]
+
+ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0
+[vsyscall]
+
+Mediante objdump -d hola podemos desensamblar el programa y ver
+las llamadas que se van haciendo par ver en que momento se hace
+una espera ocupada
+
