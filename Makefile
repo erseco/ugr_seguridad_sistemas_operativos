@@ -16,7 +16,7 @@
 #  sudo apt-get install odt2txt / brew install odt2txt
 #
 ###############################################################################
-ODTS=$(shell find -type f -name '*.odt')
+ODTS=$(shell find . -type f -name '*.odt')
 HTMLS=$(wildcard *.html)
 MDS=$(patsubst %.html,%.md, $(HTMLS))
 TXTS=$(patsubst %.odt,%.txt, $(ODTS))
@@ -36,4 +36,5 @@ odt2html:
 
 # conversión a txt
 %.txt : %.odt
-	odt2txt $< > $@
+	#odt2txt $< > $@
+	textutil -convert txt $< -output $@
